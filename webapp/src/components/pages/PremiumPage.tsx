@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import PremiumCheckout from '../common/PremiumCheckout';
 import { STRIPE_CONFIG } from '../../utils/stripe';
+import { useTelegram } from '../../hooks/useTelegram';
 
 const PremiumPage: React.FC = () => {
   const [showCheckout, setShowCheckout] = useState(false);
   const [userId] = useState('current-user-id'); // This would come from your auth system
+  const { user: telegramUser } = useTelegram();
 
   const handleUpgradeClick = () => {
     setShowCheckout(true);
@@ -30,8 +32,8 @@ const PremiumPage: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-50 py-8">
         <PremiumCheckout
-          priceId={STRIPE_CONFIG.PREMIUM_PRICE_ID}
           userId={userId}
+          telegramId={telegramUser?.id.toString() || ''}
           onSuccess={handleCheckoutSuccess}
           onError={handleCheckoutError}
           onCancel={handleCheckoutCancel}

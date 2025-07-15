@@ -4,9 +4,9 @@ import { queryKeys, staleTimeConfig, errorHandling, cacheUtils } from '../lib/qu
 import { useEffect } from 'react';
 
 // Type definitions from the existing useSupabase hook
-type User = Database['public']['Tables']['users']['Row'];
-type Stats = Database['public']['Tables']['stats']['Row'];
-type Platform = Database['public']['Tables']['platforms']['Row'];
+export type User = Database['public']['Tables']['users']['Row'];
+export type Stats = Database['public']['Tables']['stats']['Row'];
+export type Platform = Database['public']['Tables']['platforms']['Row'];
 
 export interface UserWithStats extends User {
   stats?: Stats;
@@ -639,13 +639,4 @@ export const useVerifyStats = (
   });
 };
 
-// Export all types for external use
-export type {
-  User,
-  Stats,
-  Platform,
-  UserWithStats,
-  LeaderboardUser,
-  PaginationOptions,
-  LeaderboardOptions,
-};
+// Types are exported inline above, no need for separate export block

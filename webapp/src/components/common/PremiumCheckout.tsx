@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { getPremiumPriceDisplay } from '../../utils/stripe';
 import { CheckoutProps } from '../../types/stripe';
+import { useMutation } from '@tanstack/react-query';
+import { supabase } from '../../lib/supabase';
 
 const PremiumCheckout: React.FC<CheckoutProps> = ({
   userId,
@@ -9,7 +11,15 @@ const PremiumCheckout: React.FC<CheckoutProps> = ({
   onError,
   onCancel,
 }) => {
-  const createCheckoutSession = useMutation(api.checkout.createCheckoutSession);
+  const createCheckoutSession = useMutation({
+    mutationFn: async (data: { userId: string; telegramId: string; successUrl: string; cancelUrl: string }) => {
+      const { data: result, error } = await supabase.functions.invoke('checkout', {
+        body: data
+      });
+      if (error) throw error;
+      return result;
+    }
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>('');
 
@@ -21,8 +31,8 @@ const PremiumCheckout: React.FC<CheckoutProps> = ({
 
     try {
       const currentUrl = window.location.origin;
-      const result = await createCheckoutSession({
-        userId: userId as Id<"users">,
+      const result = await createCheckoutSession.mutateAsync({
+        userId: userId,
         telegramId: telegramId,
         successUrl: `${currentUrl}/premium/success`,
         cancelUrl: `${currentUrl}/premium`,

@@ -13,6 +13,17 @@ export default defineConfig({
       '@supabase/supabase-js'
     ]
   },
+  build: {
+    rollupOptions: {
+      onwarn: (warning, warn) => {
+        // Suppress certain warnings that can cause build failures
+        if (warning.code === 'CIRCULAR_DEPENDENCY') return;
+        warn(warning);
+      }
+    },
+    target: 'esnext',
+    minify: 'esbuild'
+  },
   server: {
     port: 5173,
     host: '0.0.0.0'

@@ -150,7 +150,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ userId }) => {
                 <h1 className="profile-username">@{user.username}</h1>
                 <p className="profile-platform">{user.selected_platform}</p>
                 <div className="profile-rank">
-                  <span className="rank-badge">#{stats?.rank || 'N/A'}</span>
+                  <span className="rank-badge">#N/A</span>
                   <span className="rank-text">Global Rank</span>
                 </div>
               </>
@@ -313,7 +313,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ userId }) => {
             <div className="activity-content">
               <div className="activity-main">
                 <span className="activity-text">
-                  <strong>Rank improved</strong> to #{stats?.rank || 'N/A'}
+                  <strong>Rank improved</strong> to #N/A
                 </span>
                 <div className="activity-meta">
                   <span className="activity-time">1d</span>

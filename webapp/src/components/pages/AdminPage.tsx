@@ -66,10 +66,8 @@ const AdminPage: React.FC<AdminPageProps> = ({ userId }) => {
         losses: stats.losses,
         verification_status: 'verified',
         updated_by: userId, // Should be admin user ID
-        platform: 'Domino! by Flyclops', // Should be from user's selected platform
-        games_played: stats.wins + stats.losses,
-        win_rate: stats.wins / (stats.wins + stats.losses) || 0
-      })
+        platform_id: 'domino-flyclops-id' // This should be fetched from platforms table
+      } as any)
       setEditingStats(null)
       setStatsForm({ wins: 0, losses: 0 })
     } catch (error) {

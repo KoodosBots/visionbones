@@ -607,15 +607,8 @@ export const useStatsSummary = (): UseSupabaseReturn<{
   return { data, loading, error, refresh };
 };
 
-// Export all types for external use
+// Main hook types exported inline above
 export type {
-  User,
-  Stats,
-  Platform,
-  UserWithStats,
-  LeaderboardUser,
-  PaginationOptions,
-  LeaderboardOptions,
   UseSupabaseReturn,
   UseSupabaseListReturn,
 };
