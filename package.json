@@ -1,0 +1,76 @@
+{
+  "name": "visionbones",
+  "version": "1.0.0",
+  "description": "Domino game leaderboard aggregator Telegram Mini App",
+  "main": "bot/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:bot\" \"npm run dev:webapp\"",
+    "dev:bot": "cd bot && npm run dev",
+    "dev:webapp": "cd webapp && npm run dev",
+    "dev:supabase": "supabase start",
+    "build": "npm run build:bot && npm run build:webapp",
+    "build:bot": "cd bot && npm run build",
+    "build:webapp": "cd webapp && npm run build",
+    "start": "npm run start:bot",
+    "start:bot": "cd bot && npm start",
+    "start:webapp": "cd webapp && npm start",
+    "test": "npm run test:bot && npm run test:webapp",
+    "test:bot": "cd bot && npm test",
+    "test:webapp": "cd webapp && npm test",
+    "lint": "npm run lint:bot && npm run lint:webapp",
+    "lint:bot": "cd bot && npm run lint",
+    "lint:webapp": "cd webapp && npm run lint",
+    "deploy": "npm run build && railway deploy",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:reset": "supabase db reset",
+    "supabase:push": "supabase db push",
+    "supabase:deploy": "supabase functions deploy telegram-auth && supabase functions deploy stripe-webhook",
+    "supabase:types": "supabase gen types typescript --local > webapp/src/types/supabase.ts",
+    "supabase:link": "supabase link",
+    "supabase:status": "supabase status",
+    "setup": "npm install && cd bot && npm install && cd ../webapp && npm install && cd ../",
+    "clean": "rm -rf node_modules bot/node_modules webapp/node_modules "
+  },
+  "keywords": [
+    "telegram-bot",
+    "telegram-mini-app",
+    "dominoes",
+    "leaderboard",
+    "gaming",
+    "subscription",
+    "supabase",
+    "real-time",
+    "database"
+  ],
+  "author": "VisionBones Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.56.0",
+    "prettier": "^3.1.0",
+    "supabase": "^1.142.2",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  },
+  "workspaces": [
+    "bot",
+    "webapp"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/visionbones.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/visionbones/issues"
+  },
+  "homepage": "https://github.com/your-username/visionbones#readme"
+}

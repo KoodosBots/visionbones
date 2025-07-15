@@ -1,0 +1,520 @@
+/* Instagram Icon System for VisionBones */
+
+/* Instagram-style Icon Base */
+.instagram-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: var(--instagram-text-secondary);
+  transition: color 0.2s ease, transform 0.1s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.instagram-icon:hover {
+  color: var(--instagram-text-primary);
+  transform: scale(1.1);
+}
+
+.instagram-icon.active {
+  color: var(--instagram-text-primary);
+}
+
+.instagram-icon.large {
+  width: 32px;
+  height: 32px;
+}
+
+.instagram-icon.small {
+  width: 16px;
+  height: 16px;
+}
+
+/* Instagram Navigation Icons */
+.nav-icon-home::before {
+  content: "🏠";
+  font-size: 20px;
+}
+
+.nav-icon-search::before {
+  content: "🔍";
+  font-size: 18px;
+}
+
+.nav-icon-leaderboard::before {
+  content: "🏆";
+  font-size: 18px;
+}
+
+.nav-icon-bible::before {
+  content: "📖";
+  font-size: 18px;
+}
+
+.nav-icon-profile::before {
+  content: "👤";
+  font-size: 18px;
+}
+
+/* Active state overrides for navigation */
+.nav-btn.active .nav-icon-home::before {
+  content: "🏠";
+  filter: brightness(1.2);
+}
+
+.nav-btn.active .nav-icon-search::before {
+  content: "🔍";
+  filter: brightness(1.2);
+}
+
+.nav-btn.active .nav-icon-leaderboard::before {
+  content: "🏆";
+  filter: brightness(1.2);
+}
+
+.nav-btn.active .nav-icon-bible::before {
+  content: "📖";
+  filter: brightness(1.2);
+}
+
+.nav-btn.active .nav-icon-profile::before {
+  content: "👤";
+  filter: brightness(1.2);
+}
+
+/* Instagram Action Icons */
+.icon-heart::before {
+  content: "♡";
+  font-size: 24px;
+  transition: all 0.2s ease;
+}
+
+.icon-heart.liked::before {
+  content: "❤️";
+  color: var(--instagram-red);
+  animation: instagramHeart 0.3s ease-in-out;
+}
+
+.icon-comment::before {
+  content: "💬";
+  font-size: 20px;
+}
+
+.icon-share::before {
+  content: "📤";
+  font-size: 20px;
+}
+
+.icon-bookmark::before {
+  content: "🔖";
+  font-size: 20px;
+}
+
+.icon-bookmark.saved::before {
+  content: "🔖";
+  color: var(--instagram-text-primary);
+}
+
+.icon-more::before {
+  content: "⋯";
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.icon-close::before {
+  content: "✕";
+  font-size: 18px;
+}
+
+.icon-back::before {
+  content: "←";
+  font-size: 20px;
+}
+
+.icon-forward::before {
+  content: "→";
+  font-size: 20px;
+}
+
+.icon-up::before {
+  content: "↑";
+  font-size: 20px;
+}
+
+.icon-down::before {
+  content: "↓";
+  font-size: 20px;
+}
+
+/* Instagram Status Icons */
+.icon-verified::before {
+  content: "✓";
+  color: var(--instagram-blue);
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.icon-premium::before {
+  content: "⭐";
+  color: var(--instagram-yellow);
+  font-size: 16px;
+}
+
+.icon-crown::before {
+  content: "👑";
+  font-size: 18px;
+}
+
+.icon-fire::before {
+  content: "🔥";
+  font-size: 18px;
+}
+
+.icon-trophy::before {
+  content: "🏆";
+  font-size: 18px;
+}
+
+.icon-medal::before {
+  content: "🏅";
+  font-size: 18px;
+}
+
+/* Instagram Platform Icons */
+.icon-domino::before {
+  content: "🎲";
+  font-size: 20px;
+}
+
+.icon-game::before {
+  content: "🎮";
+  font-size: 20px;
+}
+
+.icon-win::before {
+  content: "✅";
+  color: var(--instagram-green);
+  font-size: 16px;
+}
+
+.icon-loss::before {
+  content: "❌";
+  color: var(--instagram-red);
+  font-size: 16px;
+}
+
+.icon-pending::before {
+  content: "⏳";
+  color: var(--instagram-orange);
+  font-size: 16px;
+}
+
+/* Instagram Settings Icons */
+.icon-settings::before {
+  content: "⚙️";
+  font-size: 20px;
+}
+
+.icon-edit::before {
+  content: "✏️";
+  font-size: 18px;
+}
+
+.icon-delete::before {
+  content: "🗑️";
+  font-size: 18px;
+  color: var(--instagram-red);
+}
+
+.icon-add::before {
+  content: "➕";
+  color: var(--instagram-blue);
+  font-size: 18px;
+}
+
+.icon-minus::before {
+  content: "➖";
+  color: var(--instagram-red);
+  font-size: 18px;
+}
+
+/* Instagram Loading Icons */
+.icon-loading {
+  animation: instagramSpin 1s linear infinite;
+}
+
+.icon-loading::before {
+  content: "⟳";
+  font-size: 20px;
+}
+
+@keyframes instagramSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Instagram Social Icons */
+.icon-instagram::before {
+  content: "📷";
+  font-size: 20px;
+}
+
+.icon-twitter::before {
+  content: "🐦";
+  font-size: 18px;
+}
+
+.icon-tiktok::before {
+  content: "🎵";
+  font-size: 18px;
+}
+
+.icon-youtube::before {
+  content: "📺";
+  font-size: 18px;
+}
+
+.icon-link::before {
+  content: "🔗";
+  font-size: 18px;
+}
+
+/* Instagram Notification Icons */
+.icon-notification::before {
+  content: "🔔";
+  font-size: 20px;
+}
+
+.icon-notification.muted::before {
+  content: "🔕";
+  color: var(--instagram-text-tertiary);
+}
+
+.icon-message::before {
+  content: "💌";
+  font-size: 20px;
+}
+
+.icon-inbox::before {
+  content: "📥";
+  font-size: 20px;
+}
+
+/* Instagram Badge Overlays */
+.icon-badge {
+  position: relative;
+}
+
+.icon-badge::after {
+  content: attr(data-badge);
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--instagram-red);
+  color: var(--instagram-white);
+  font-size: 10px;
+  font-weight: var(--instagram-font-weight-bold);
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 16px;
+  text-align: center;
+  line-height: 12px;
+  box-shadow: 0 0 0 2px var(--instagram-white);
+}
+
+.icon-badge[data-badge=""]::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  min-width: 0;
+  border-radius: 50%;
+}
+
+/* Instagram Icon Buttons */
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: none;
+  border-radius: var(--instagram-radius-round);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--instagram-text-secondary);
+}
+
+.icon-button:hover {
+  background: var(--instagram-background);
+  color: var(--instagram-text-primary);
+}
+
+.icon-button:active {
+  transform: scale(0.95);
+  background: var(--instagram-background-secondary);
+}
+
+.icon-button.primary {
+  background: var(--instagram-blue);
+  color: var(--instagram-white);
+}
+
+.icon-button.primary:hover {
+  background: var(--instagram-blue-dark);
+}
+
+.icon-button.danger {
+  color: var(--instagram-red);
+}
+
+.icon-button.danger:hover {
+  background: rgba(237, 73, 86, 0.1);
+}
+
+.icon-button.success {
+  color: var(--instagram-green);
+}
+
+.icon-button.success:hover {
+  background: rgba(0, 186, 124, 0.1);
+}
+
+/* Instagram Icon Groups */
+.icon-group {
+  display: flex;
+  align-items: center;
+  gap: var(--instagram-space-2);
+}
+
+.icon-group.spaced {
+  gap: var(--instagram-space-4);
+}
+
+.icon-group.justified {
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Instagram Floating Action Button */
+.fab {
+  position: fixed;
+  bottom: calc(48px + var(--instagram-space-4) + env(safe-area-inset-bottom, 0));
+  right: var(--instagram-space-4);
+  width: 56px;
+  height: 56px;
+  background: var(--instagram-blue);
+  color: var(--instagram-white);
+  border: none;
+  border-radius: var(--instagram-radius-round);
+  box-shadow: var(--instagram-shadow-large);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.fab:hover {
+  background: var(--instagram-blue-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--instagram-shadow-overlay);
+}
+
+.fab:active {
+  transform: translateY(0);
+}
+
+.fab.hidden {
+  transform: translateY(100px);
+  opacity: 0;
+}
+
+/* Instagram Icon Animations */
+.icon-bounce {
+  animation: instagramBounce 0.6s ease-out;
+}
+
+.icon-pulse {
+  animation: instagramPulse 1s ease-in-out infinite;
+}
+
+.icon-shake {
+  animation: instagramShake 0.5s ease-in-out;
+}
+
+@keyframes instagramPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+@keyframes instagramShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+/* Instagram Progressive Web App Icons */
+.icon-install::before {
+  content: "📱";
+  font-size: 20px;
+}
+
+.icon-offline::before {
+  content: "📡";
+  font-size: 20px;
+  color: var(--instagram-text-tertiary);
+}
+
+.icon-online::before {
+  content: "🌐";
+  font-size: 20px;
+  color: var(--instagram-green);
+}
+
+/* Instagram Accessibility */
+.icon-button[aria-label]:focus {
+  outline: 2px solid var(--instagram-blue);
+  outline-offset: 2px;
+}
+
+.instagram-icon[aria-label]:focus {
+  outline: 2px solid var(--instagram-blue);
+  outline-offset: 2px;
+  border-radius: var(--instagram-radius-small);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .instagram-icon {
+    border: 1px solid currentColor;
+  }
+  
+  .icon-button {
+    border: 1px solid var(--instagram-border);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .instagram-icon,
+  .icon-button,
+  .fab {
+    transition: none;
+  }
+  
+  .icon-loading {
+    animation: none;
+  }
+  
+  .icon-bounce,
+  .icon-pulse,
+  .icon-shake {
+    animation: none;
+  }
+}
