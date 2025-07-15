@@ -1,44 +1,105 @@
 import React, { useState } from 'react'
-import { useLeaderboard, usePlatforms, LeaderboardUser } from '../../hooks/useQueries'
-
-type TimeframeType = 'all' | 'week' | 'month'
+import { useQuery } from '@tanstack/react-query'
+import { supabase } from '../../lib/supabase'
 
 interface LeaderboardPageProps {
-  userId?: string;
+  userId: string
+}
+
+interface LeaderboardEntry {
+  username: string
+  platform_username: string
+  selected_platform: string
+  is_premium: boolean
+  verified_badge: boolean
+  social_links: any
+  wins: number
+  losses: number
+  games_played: number
+  win_rate: number
+  last_updated: string
+  rank: number
+  platform_display_name?: string
+  platform_rank?: number
+}
+
+interface Platform {
+  id: string
+  name: string
+  display_name: string
 }
 
 const LeaderboardPage: React.FC<LeaderboardPageProps> = ({ userId }) => {
-  const [selectedTimeframe, setSelectedTimeframe] = useState<TimeframeType>('all')
-  const [selectedPlatform, setSelectedPlatform] = useState<string>('')
-  const [verifiedOnly, setVerifiedOnly] = useState(false)
+  const [view, setView] = useState<'overall' | 'platform'>('overall')
+  const [selectedPlatform, setSelectedPlatform] = useState<string>('all')
 
-  // Fetch leaderboard data using React Query
-  const { 
-    data: leaderboardData = [], 
-    isLoading: isLeaderboardLoading, 
-    error: leaderboardError 
-  } = useLeaderboard({
-    timeframe: selectedTimeframe,
-    platform: selectedPlatform || undefined,
-    limit: 50
+  // Fetch platforms for filter
+  const { data: platforms } = useQuery({
+    queryKey: ['platforms'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('platforms')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_name')
+      
+      if (error) throw error
+      return data as Platform[]
+    }
   })
 
-  // Fetch platforms for filtering
-  const { data: platforms = [] } = usePlatforms()
+  // Fetch leaderboard data
+  const { data: leaderboard, isLoading, error } = useQuery({
+    queryKey: ['leaderboard', view, selectedPlatform],
+    queryFn: async () => {
+      if (view === 'overall') {
+        const { data, error } = await supabase
+          .from('leaderboard_overall')
+          .select('*')
+          .limit(100)
+        
+        if (error) throw error
+        return data as LeaderboardEntry[]
+      } else {
+        const { data, error } = await supabase
+          .from('leaderboard_by_platform')
+          .select('*')
+          .eq(selectedPlatform !== 'all' ? 'selected_platform' : 'selected_platform', 
+              selectedPlatform !== 'all' ? selectedPlatform : undefined)
+          .limit(100)
+        
+        if (error) throw error
+        return data as LeaderboardEntry[]
+      }
+    }
+  })
 
-  // Filter data based on verification status if needed
-  const filteredUsers = verifiedOnly 
-    ? leaderboardData.filter(user => user.verified_badge)
-    : leaderboardData
+  const getRankDisplay = (entry: LeaderboardEntry) => {
+    if (view === 'platform' && entry.platform_rank) {
+      return entry.platform_rank
+    }
+    return entry.rank
+  }
 
-  // Loading state
-  if (isLeaderboardLoading) {
+  const formatWinRate = (rate: number) => {
+    return `${(rate * 100).toFixed(1)}%`
+  }
+
+  const formatLastUpdated = (dateString: string) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffTime = Math.abs(now.getTime() - date.getTime())
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+    
+    if (diffDays === 1) return 'Yesterday'
+    if (diffDays < 7) return `${diffDays} days ago`
+    if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`
+    return `${Math.ceil(diffDays / 30)} months ago`
+  }
+
+  if (isLoading) {
     return (
       <div className="leaderboard-page">
-        <div className="page-header">
-          <h1 className="page-title">Leaderboard</h1>
-          <p className="page-subtitle">Top domino players across all platforms</p>
-        </div>
         <div className="loading-state">
           <div className="loading-spinner"></div>
           <p>Loading leaderboard...</p>
@@ -47,17 +108,12 @@ const LeaderboardPage: React.FC<LeaderboardPageProps> = ({ userId }) => {
     )
   }
 
-  // Error state
-  if (leaderboardError) {
+  if (error) {
     return (
       <div className="leaderboard-page">
-        <div className="page-header">
-          <h1 className="page-title">Leaderboard</h1>
-          <p className="page-subtitle">Top domino players across all platforms</p>
-        </div>
         <div className="error-state">
-          <p>Error loading leaderboard: {leaderboardError.message}</p>
-          <button onClick={() => window.location.reload()}>Retry</button>
+          <h2>Unable to load leaderboard</h2>
+          <p>Please try again later</p>
         </div>
       </div>
     )
@@ -65,120 +121,138 @@ const LeaderboardPage: React.FC<LeaderboardPageProps> = ({ userId }) => {
 
   return (
     <div className="leaderboard-page">
-      {/* Page Header */}
-      <div className="page-header">
-        <h1 className="page-title">Leaderboard</h1>
-        <p className="page-subtitle">Top domino players across all platforms</p>
+      <div className="leaderboard-header">
+        <h1>🏆 Leaderboard</h1>
+        <p>Compete with the best domino players</p>
       </div>
 
-      {/* Filter/Sort Section */}
-      <div className="filter-section">
-        <div className="filter-pills">
-          <button 
-            className={`filter-pill ${selectedTimeframe === 'all' ? 'active' : ''}`}
-            onClick={() => setSelectedTimeframe('all')}
+      <div className="leaderboard-controls">
+        <div className="view-toggle">
+          <button
+            className={`toggle-btn ${view === 'overall' ? 'active' : ''}`}
+            onClick={() => setView('overall')}
           >
-            All Time
+            Overall
           </button>
-          <button 
-            className={`filter-pill ${selectedTimeframe === 'week' ? 'active' : ''}`}
-            onClick={() => setSelectedTimeframe('week')}
+          <button
+            className={`toggle-btn ${view === 'platform' ? 'active' : ''}`}
+            onClick={() => setView('platform')}
           >
-            This Week
+            By Platform
           </button>
-          <button 
-            className={`filter-pill ${selectedTimeframe === 'month' ? 'active' : ''}`}
-            onClick={() => setSelectedTimeframe('month')}
-          >
-            This Month
-          </button>
-          {platforms.length > 0 && (
-            <select 
-              className="filter-select"
+        </div>
+
+        {view === 'platform' && platforms && (
+          <div className="platform-filter">
+            <select
               value={selectedPlatform}
               onChange={(e) => setSelectedPlatform(e.target.value)}
+              className="platform-select"
             >
-              <option value="">All Platforms</option>
-              {platforms.map(platform => (
+              <option value="all">All Platforms</option>
+              {platforms.map((platform) => (
                 <option key={platform.id} value={platform.name}>
-                  {platform.name}
+                  {platform.display_name}
                 </option>
               ))}
             </select>
-          )}
-          <button 
-            className={`filter-pill ${verifiedOnly ? 'active' : ''}`}
-            onClick={() => setVerifiedOnly(!verifiedOnly)}
-          >
-            Verified Only
-          </button>
-        </div>
+          </div>
+        )}
       </div>
 
-      {/* Instagram-style User List */}
-      <div className="user-list">
-        {filteredUsers.length === 0 ? (
-          <div className="empty-state">
-            <p>No players found for the selected filters.</p>
-            <button onClick={() => {
-              setSelectedTimeframe('all')
-              setSelectedPlatform('')
-              setVerifiedOnly(false)
-            }}>
-              Reset Filters
-            </button>
-          </div>
-        ) : (
-          filteredUsers.map((user, index) => (
-            <div key={user.id} className="user-row">
-              {/* Rank */}
-              <div className="rank-section">
-                {user.rank === 1 && <span className="rank-medal gold">🥇</span>}
-                {user.rank === 2 && <span className="rank-medal silver">🥈</span>}
-                {user.rank === 3 && <span className="rank-medal bronze">🥉</span>}
-                {user.rank > 3 && <span className="rank-number">#{user.rank}</span>}
+      {leaderboard && leaderboard.length > 0 ? (
+        <div className="leaderboard-list">
+          {leaderboard.map((entry, index) => (
+            <div key={`${entry.username}-${entry.selected_platform}`} className="leaderboard-entry">
+              <div className="rank">
+                <span className="rank-number">#{getRankDisplay(entry)}</span>
+                {getRankDisplay(entry) <= 3 && (
+                  <span className="rank-medal">
+                    {getRankDisplay(entry) === 1 ? '🥇' : 
+                     getRankDisplay(entry) === 2 ? '🥈' : '🥉'}
+                  </span>
+                )}
               </div>
 
-              {/* User Avatar */}
-              <div className="user-avatar">
-                <div className="avatar-circle">
-                  <span className="avatar-initial">
-                    {user.username.charAt(0)}
+              <div className="player-info">
+                <div className="player-name">
+                  <span className="username">
+                    {entry.username}
+                    {entry.verified_badge && <span className="verified-badge">✓</span>}
+                    {entry.is_premium && <span className="premium-badge">👑</span>}
+                  </span>
+                  <span className="platform-username">
+                    @{entry.platform_username}
                   </span>
                 </div>
-                {user.verified_badge && (
-                  <div className="verified-badge">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#0095f6">
-                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                
+                <div className="platform-info">
+                  <span className="platform-name">
+                    {view === 'platform' && entry.platform_display_name 
+                      ? entry.platform_display_name 
+                      : entry.selected_platform}
+                  </span>
+                  <span className="last-updated">
+                    Updated {formatLastUpdated(entry.last_updated)}
+                  </span>
+                </div>
+
+                {entry.is_premium && entry.social_links && Object.keys(entry.social_links).length > 0 && (
+                  <div className="social-links">
+                    {entry.social_links.twitter && (
+                      <a href={`https://twitter.com/${entry.social_links.twitter}`} 
+                         target="_blank" rel="noopener noreferrer" className="social-link">
+                        🐦
+                      </a>
+                    )}
+                    {entry.social_links.instagram && (
+                      <a href={`https://instagram.com/${entry.social_links.instagram}`} 
+                         target="_blank" rel="noopener noreferrer" className="social-link">
+                        📷
+                      </a>
+                    )}
+                    {entry.social_links.tiktok && (
+                      <a href={`https://tiktok.com/@${entry.social_links.tiktok}`} 
+                         target="_blank" rel="noopener noreferrer" className="social-link">
+                        🎵
+                      </a>
+                    )}
                   </div>
                 )}
               </div>
 
-              {/* User Info */}
-              <div className="user-info">
-                <div className="username">{user.username}</div>
-                <div className="platform">{user.stats.platform}</div>
-              </div>
-
-              {/* Stats */}
-              <div className="user-stats">
-                <div className="win-rate">{(user.stats.win_rate * 100).toFixed(1)}%</div>
-                <div className="record">{user.stats.wins}W - {user.stats.losses}L</div>
+              <div className="player-stats">
+                <div className="stat-group">
+                  <span className="stat-label">Win Rate</span>
+                  <span className="stat-value win-rate">{formatWinRate(entry.win_rate)}</span>
+                </div>
+                <div className="stat-group">
+                  <span className="stat-label">Record</span>
+                  <span className="stat-value record">{entry.wins}W - {entry.losses}L</span>
+                </div>
+                <div className="stat-group">
+                  <span className="stat-label">Games</span>
+                  <span className="stat-value games">{entry.games_played}</span>
+                </div>
               </div>
             </div>
-          ))
-        )}
-      </div>
-
-      {/* Load More Button - Could be enhanced with infinite query */}
-      {filteredUsers.length > 0 && filteredUsers.length >= 50 && (
-        <div className="load-more-section">
-          <button className="load-more-btn">
-            Load More
-          </button>
+          ))}
+        </div>
+      ) : (
+        <div className="empty-state">
+          <h2>No stats available yet</h2>
+          <p>Be the first to get your domino stats verified!</p>
         </div>
       )}
+
+      <div className="leaderboard-footer">
+        <p className="text-center">
+          <small>
+            🔄 Stats are manually verified by admins<br/>
+            👑 Premium users get verified badges and social links
+          </small>
+        </p>
+      </div>
     </div>
   )
 }

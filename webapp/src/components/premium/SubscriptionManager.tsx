@@ -4,7 +4,7 @@ import { useUpdateUser } from '../../hooks/useQueries';
 import '../../instagram-components.css';
 
 interface SubscriptionData {
-  status: 'active'  < /dev/null |  'cancelled' | 'past_due' | 'trialing';
+  status: 'active' | 'cancelled' | 'past_due' | 'trialing';
   currentPeriodEnd: Date;
   planName: string;
   amount: number;

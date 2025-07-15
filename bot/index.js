@@ -18,30 +18,67 @@ Track your domino stats across all platforms in one place.
 
 Click the button below to open the app:`;
 
-  ctx.reply(welcomeMessage, {
-    reply_markup: {
-      inline_keyboard: [[
-        {
-          text: '🎮 Open VisionBones',
-          web_app: { url: WEBAPP_URL }
-        }
-      ]]
-    }
-  });
+  // Check if URL is HTTPS (required for Telegram Mini Apps)
+  if (WEBAPP_URL.startsWith('https://')) {
+    ctx.reply(welcomeMessage, {
+      reply_markup: {
+        inline_keyboard: [[
+          {
+            text: '🎮 Open VisionBones',
+            web_app: { url: WEBAPP_URL }
+          }
+        ]]
+      }
+    });
+  } else {
+    // For development/testing with HTTP
+    ctx.reply(`${welcomeMessage}
+
+⚠️ Currently in development mode.
+Web app URL: ${WEBAPP_URL}
+
+Note: Telegram Mini Apps require HTTPS URLs in production.`, {
+      reply_markup: {
+        inline_keyboard: [[
+          {
+            text: '📱 View on GitHub',
+            url: 'https://github.com/KoodosBots/visionbones'
+          }
+        ]]
+      }
+    });
+  }
 });
 
 // Handle any text message - Always show the launch button
 bot.on('text', (ctx) => {
-  ctx.reply('Click the button below to open VisionBones:', {
-    reply_markup: {
-      inline_keyboard: [[
-        {
-          text: '🎮 Open VisionBones',
-          web_app: { url: WEBAPP_URL }
-        }
-      ]]
-    }
-  });
+  if (WEBAPP_URL.startsWith('https://')) {
+    ctx.reply('Click the button below to open VisionBones:', {
+      reply_markup: {
+        inline_keyboard: [[
+          {
+            text: '🎮 Open VisionBones',
+            web_app: { url: WEBAPP_URL }
+          }
+        ]]
+      }
+    });
+  } else {
+    ctx.reply(`VisionBones is currently in development mode.
+
+Web app URL: ${WEBAPP_URL}
+
+For production, the app will be available via HTTPS with the Mini App button.`, {
+      reply_markup: {
+        inline_keyboard: [[
+          {
+            text: '📱 View on GitHub',
+            url: 'https://github.com/KoodosBots/visionbones'
+          }
+        ]]
+      }
+    });
+  }
 });
 
 // Error handling
