@@ -103,7 +103,8 @@ docker-compose logs -f
 
 ## Application URLs
 
-- **Webapp**: http://145.79.0.49:8080
+- **Main Webapp**: http://145.79.0.49:8080 (User-facing Telegram Mini App)
+- **Admin Panel**: http://145.79.0.49:8081 (Admin management interface)
 - **Bot Management**: Internal (PM2)
 - **Database**: Supabase (hosted)
 
@@ -116,7 +117,8 @@ docker-compose logs -f
 
 ## Docker Services
 
-- **webapp**: React frontend (port 8080)
+- **webapp**: React frontend - User-facing Telegram Mini App (port 8080)
+- **admin**: React frontend - Admin management panel (port 8081)
 - **bot**: Telegram bot (internal)
 - **nginx**: Reverse proxy (port 80/443)
 

@@ -12,9 +12,6 @@ const BottomTabNavigation: React.FC<BottomTabNavigationProps> = ({
   onTabChange,
   userId 
 }) => {
-  // Check if user is admin (simplified check for demo - in production this would be more secure)
-  const isAdmin = userId === 'admin' || userId === 'test-user-123'
-  
   const tabs = [
     {
       id: 'leaderboard' as TabType,
@@ -77,28 +74,6 @@ const BottomTabNavigation: React.FC<BottomTabNavigationProps> = ({
       label: 'Bible'
     }
   ]
-  
-  // Add admin tab if user is admin
-  if (isAdmin) {
-    tabs.push({
-      id: 'admin' as TabType,
-      icon: (
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-        </svg>
-      ),
-      label: 'Admin'
-    })
-  }
 
   return (
     <nav className="bottom-tab-nav">

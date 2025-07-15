@@ -7,14 +7,13 @@ import BottomTabNavigation from './components/layout/BottomTabNavigation'
 import LeaderboardPage from './components/pages/LeaderboardPage'
 import ProfilePage from './components/pages/ProfilePage'
 import BiblePage from './components/pages/BiblePage'
-import AdminPage from './components/pages/AdminPage'
 import OnboardingPage from './components/pages/OnboardingPage'
 import StripeProvider from './components/common/StripeProvider'
 import { queryClient } from './lib/queryClient'
 import { useTelegram } from './hooks/useTelegram'
 import { supabase } from './lib/supabase'
 
-export type TabType = 'leaderboard' | 'profile' | 'bible' | 'admin'
+export type TabType = 'leaderboard' | 'profile' | 'bible'
 
 interface UserData {
   id: string
@@ -81,8 +80,6 @@ function AppContent() {
         return <ProfilePage userId={userId} />
       case 'bible':
         return <BiblePage userId={userId} />
-      case 'admin':
-        return <AdminPage userId={userId} />
       default:
         return <LeaderboardPage userId={userId} />
     }

@@ -1,12 +1,8 @@
 import React, { useState } from 'react'
-import { usePendingVerifications, useVerifyStats, useUpsertStats } from '../../hooks/useQueries'
-import { User, Stats } from '../../hooks/useQueries'
+import { usePendingVerifications, useVerifyStats, useUpsertStats } from '../hooks/useQueries'
+import { User, Stats } from '../hooks/useQueries'
 
-interface AdminPageProps {
-  userId?: string;
-}
-
-const AdminPage: React.FC<AdminPageProps> = ({ userId }) => {
+const AdminPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'pending' | 'users' | 'stats'>('pending')
   const [editingStats, setEditingStats] = useState<string | null>(null)
   const [statsForm, setStatsForm] = useState({ wins: 0, losses: 0 })
@@ -88,7 +84,7 @@ const AdminPage: React.FC<AdminPageProps> = ({ userId }) => {
       {/* Admin Header */}
       <div className="admin-header">
         <div className="admin-title">
-          <h1>Admin Panel</h1>
+          <h1>VisionBones Admin Panel</h1>
           <div className="admin-badge">
             <span className="badge-icon">👑</span>
             <span>Admin</span>
