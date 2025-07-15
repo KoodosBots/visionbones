@@ -6,8 +6,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies including PM2
-RUN npm install --production && npm install -g pm2
+# Install dependencies including PM2 (handle missing package-lock.json gracefully)
+RUN if [ -f package-lock.json ]; then npm ci --only=production; else npm install --production; fi && npm install -g pm2
 
 # Copy source code
 COPY . .

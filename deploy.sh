@@ -29,6 +29,14 @@ fi
 
 echo "✅ Docker Compose is available"
 
+# Prepare deployment (generate package-lock.json if missing)
+echo "🔧 Preparing deployment..."
+if [ -f scripts/prepare-deployment.sh ]; then
+    ./scripts/prepare-deployment.sh
+else
+    echo "⚠️  Preparation script not found, continuing..."
+fi
+
 # Stop existing containers if any
 echo "🛑 Stopping existing containers..."
 docker-compose down
